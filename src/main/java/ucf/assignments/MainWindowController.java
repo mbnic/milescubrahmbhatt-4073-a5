@@ -67,8 +67,10 @@ public class MainWindowController implements Initializable {
         deleteItem(item);
     }
 
-
-
+    @FXML
+    void newFileMenuItemClicked(ActionEvent event) {
+        itemModel.eraseAllItems();
+    }
 
 
     public void deleteItem(Item item) {

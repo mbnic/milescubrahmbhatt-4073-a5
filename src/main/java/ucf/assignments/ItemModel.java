@@ -19,6 +19,10 @@ public class ItemModel {
         inventory.remove(item);
     }
 
+    public void eraseAllItems() {
+        inventory.clear();
+    }
+
     public ObservableList<Item> getInventory() {
         return inventory;
     }
