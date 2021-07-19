@@ -1,5 +1,6 @@
 package ucf.assignments;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -46,7 +47,7 @@ public class MainWindowController implements Initializable {
     
     
     @FXML
-    void addNewItemButtonClicked(javafx.event.ActionEvent event) {
+    void addNewItemButtonClicked(ActionEvent event) {
 
         String serial = itemSerialNumberTextField.getText();
         String name = itemNameTextField.getText();
@@ -58,6 +59,20 @@ public class MainWindowController implements Initializable {
         itemNameTextField.clear();
         itemSerialNumberTextField.clear();
         itemPriceTextField.clear();
+    }
+
+    @FXML
+    void deleteItemButtonClicked(ActionEvent event) {
+        Item item = itemsTableView.getSelectionModel().getSelectedItem();
+        deleteItem(item);
+    }
+
+
+
+
+
+    public void deleteItem(Item item) {
+        itemModel.remove(item);
     }
 
     public void addNewItem(String serial, String name, double value) {

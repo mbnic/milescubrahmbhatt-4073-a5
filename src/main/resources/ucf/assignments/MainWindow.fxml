@@ -60,7 +60,7 @@
             </HBox>
             <HBox prefHeight="89.0" prefWidth="600.0">
                <children>
-                  <Button mnemonicParsing="false" text="Delete Selected Item" />
+                  <Button mnemonicParsing="false" onAction="#deleteItemButtonClicked" text="Delete Selected Item" />
                </children>
             </HBox>
          </children>
