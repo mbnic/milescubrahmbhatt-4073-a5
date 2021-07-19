@@ -1,0 +1,80 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class InventoryTracker {
+    start()
+    main()
+}
+
+class SceneManager {
+    scenes: Map<String, Scene>
+
+    load()
+    getScene(String): Scene
+}
+
+class MainWindowController {
+    items: ItemModel
+    scenes: SceneManager
+    fileManager: FileManager
+
+    + MainWindowController(ItemModel, SceneManager)
+
+    addItemButtonClicked(EventHandler)
+    editItemButtonClicked(EventHandler)
+    removeItemButtonClicked(EventHandler)
+
+    saveInventoryAsCSV_clicked(EventHandler)
+    saveInventoryAsHTML_clicked(EventHandler)
+    saveInventoryAsJSON_clicked(EventHandler)
+
+    addItem(String, String, Double)
+    editItem()
+
+
+}
+
+class FileManager {
+    saveAsCSV(filename: String, data: String)
+    saveAsHTML(filename: String, data: String)
+    saveAsJSON(filename: String, data: String)
+}
+
+
+
+
+
+
+class SearchItemWindowController {
+}
+
+class ItemModel {
+    - ObservableList<Item>
+}
+
+class Item {
+    - name: SimpleStringProperty
+    - serialNumber: SimpleStringProperty
+    - value: SimpleDoubleProperty
+
+    + getName()
+    + setName()
+    + nameProperty()
+    + getSerialNumber()
+
+}
+
+openjfx.org.Application <|-- InventoryTracker
+InventoryTracker - SceneManager
+SceneManager -- MainWindowController
+SceneManager -- SearchItemWindowController
+MainWindowController o-- ItemModel
+MainWindowController o-- FileManager
+
+SearchItemWindowController o-- ItemModel
+ItemModel *-- Item
+
+
+
+
+@enduml
