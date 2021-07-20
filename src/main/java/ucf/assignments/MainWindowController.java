@@ -1,5 +1,6 @@
 package ucf.assignments;
 
+import com.sun.source.doctree.SystemPropertyTree;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -48,17 +50,71 @@ public class MainWindowController implements Initializable {
     
     @FXML
     void addNewItemButtonClicked(ActionEvent event) {
+        boolean valueFlag = true;
+        boolean nameFlag = true;
+        boolean serialFlag = true;
 
         String serial = itemSerialNumberTextField.getText();
         String name = itemNameTextField.getText();
-        Double value = Double.parseDouble(itemPriceTextField.getText());
 
-        //check if value and stuff is correct than send to addNewItem
-        addNewItem(serial, name, value);
+        //check if value entered is a number
+        try {
+            Double checkValue = Double.parseDouble(itemPriceTextField.getText());
+            valueFlag = true;
+        } catch (NumberFormatException e) {
+            valueFlag = false;
+            Stage stage = new Stage();
+            stage.setTitle("ERROR");
+            stage.setScene(sceneManager.getScene("valueEnteredError"));
+            stage.show();
+            itemPriceTextField.clear();
+        }
 
-        itemNameTextField.clear();
-        itemSerialNumberTextField.clear();
-        itemPriceTextField.clear();
+        //check if serial format is correct
+        if (itemModel.isCorrectSerialFormat(serial)) {
+            serialFlag = true;
+
+        } else {
+            serialFlag = false;
+            Stage stage = new Stage();
+            stage.setTitle("ERROR");
+            stage.setScene(sceneManager.getScene("serialNumberEnteredError"));
+            stage.show();
+            itemSerialNumberTextField.clear();
+        }
+
+        //check if serial number is a duplicate
+        if (itemModel.isUniqueSerialNumber(serial)) {
+            serialFlag = true;
+        } else {
+            serialFlag = false;
+            Stage stage = new Stage();
+            stage.setTitle("ERROR");
+            stage.setScene(sceneManager.getScene("duplicateSerialNumberEnteredError"));
+            stage.show();
+            itemSerialNumberTextField.clear();
+        }
+
+        //check name is correct format
+        if (name.length() > 2 && name.length() <= 256)
+            nameFlag = true;
+        else {
+            nameFlag = false;
+            Stage stage = new Stage();
+            stage.setTitle("ERROR");
+            stage.setScene(sceneManager.getScene("nameEnteredError"));
+            stage.show();
+            itemNameTextField.clear();
+        }
+
+
+        if (valueFlag && nameFlag && serialFlag) {
+            Double value = Double.parseDouble(itemPriceTextField.getText());
+            addNewItem(serial, name, value);
+            itemNameTextField.clear();
+            itemSerialNumberTextField.clear();
+            itemPriceTextField.clear();
+        }
     }
 
     @FXML
@@ -72,6 +128,26 @@ public class MainWindowController implements Initializable {
         itemModel.eraseAllItems();
     }
 
+    @FXML
+    void searchInventoryMenuItemClicked(ActionEvent event) {
+        // make new scene for searching
+    }
+
+    @FXML
+    void editItemButtonClicked(ActionEvent event) {
+        Item item = itemsTableView.getSelectionModel().getSelectedItem();
+
+
+
+        Stage stage = new Stage();
+        stage.setTitle("Edit Item");
+        stage.setScene(sceneManager.getScene("itemEditWindow"));
+        stage.show();
+    }
+
+
+
+
 
     public void deleteItem(Item item) {
         itemModel.remove(item);
@@ -81,6 +157,4 @@ public class MainWindowController implements Initializable {
         Item item = new Item(serial, name, value);
         itemModel.add(item);
     }
-
-
 }
