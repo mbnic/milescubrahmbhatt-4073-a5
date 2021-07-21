@@ -1,31 +1,99 @@
 package ucf.assignments;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class ItemEditController implements Initializable {
+public class ItemEditController {
 
     private ItemModel itemModel;
-    private SceneManager sceneManager;
+    private Item selectedItem;
 
-    @FXML private Text oldSerialNumberText;
-    @FXML private Text oldNameText;
-    @FXML private Text oldPriceText;
+    @FXML private TextField serialNumberTextField;
+    @FXML private TextField nameTextField;
+    @FXML private TextField valueTextField;
 
-    public ItemEditController(ItemModel item_model, SceneManager scene_manager) {
-        this.itemModel = item_model;
-        this.sceneManager = scene_manager;
+    @FXML private Text errorText;
+
+
+    public void initialize(Item item, ItemModel itemModel) {
+        this.itemModel = itemModel;
+        this.selectedItem = item;
+
+        serialNumberTextField.setPromptText(item.getSerialNumber());
+        nameTextField.setPromptText(item.getName());
+        valueTextField.setPromptText(String.valueOf(item.getValue()));
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void saveChangesButtonClicked(ActionEvent actionEvent) {
+        boolean valueFlag = true;
+        boolean nameFlag = true;
+        boolean serialDuplicateFlag = true;
+        boolean serialFormatFlag = true;
+        Double value = null;
+        
+        String serial = serialNumberTextField.getText();
+        String name = nameTextField.getText();
+        String valueSTR = valueTextField.getText();
 
+        //check if value entered is a number
+        if (!valueSTR.isBlank()) {
+            try {
+                value = Double.parseDouble(valueTextField.getText());
+                valueFlag = true;
+            } catch (NumberFormatException e) {
+                valueFlag = false;
+                errorText.setText("Incorrect Value Format");
+                valueTextField.clear();
+            }
+        }
+
+
+        //check if serial format is correct
+        if (!serial.isBlank()) {
+            if (!itemModel.isCorrectSerialFormat(serial)){
+                serialFormatFlag = false;
+                errorText.setText("Incorrect Serial Number Format");
+                serialNumberTextField.clear();
+            }
+
+            if (itemModel.isUniqueSerialNumber(serial)) {
+                serialDuplicateFlag = true;
+            } else {
+                serialDuplicateFlag = false;
+                errorText.setText("Serial Number already in Inventory");
+                serialNumberTextField.clear();
+            }
+        }
+
+
+        if (!name.isBlank()) {
+            //check name is correct format
+            if (name.length() < 2 || name.length() > 256) {
+                nameFlag = false;
+                errorText.setText("Name must be between 2 and 256 characters in length");
+                nameTextField.clear();
+            }
+        }
+
+        
+        if (valueFlag && nameFlag && serialFormatFlag && serialDuplicateFlag) {
+            
+            if (!name.isBlank())
+                selectedItem.setName(name);
+            
+            if (!serial.isBlank())
+                selectedItem.setSerialNumber(serial);
+            
+            if (!valueSTR.isBlank())
+                selectedItem.setValue(value);
+
+            Stage stage = (Stage) nameTextField.getScene().getWindow();
+            stage.close();
+        }
     }
-
-
 }

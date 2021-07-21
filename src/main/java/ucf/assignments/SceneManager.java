@@ -15,7 +15,7 @@ public class SceneManager {
         ItemModel itemModel = new ItemModel();
 
         MainWindowController mainWindowController = new MainWindowController(itemModel, this);
-        ItemEditController itemEditController = new ItemEditController(itemModel, this);
+        //ItemEditController itemEditController = new ItemEditController(itemModel, this);
         //add controller for whatever new windows you decide to add
 
         Parent root;
@@ -30,15 +30,15 @@ public class SceneManager {
         }
 
 
-        loader = new FXMLLoader(getClass().getResource("itemEditWindow.fxml"));
-        loader.setController(itemEditController);
-        try {
-            root = loader.load();
-            scenes.put("itemEditWindow", new Scene(root));
-
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+//        loader = new FXMLLoader(getClass().getResource("itemEditWindow.fxml"));
+//        loader.setController(itemEditController);
+//        try {
+//            root = loader.load();
+//            scenes.put("itemEditWindow", new Scene(root));
+//
+//        } catch(IOException e) {
+//            e.printStackTrace();
+//        }
 
 
         loader = new FXMLLoader(getClass().getResource("valueEnteredError.fxml"));

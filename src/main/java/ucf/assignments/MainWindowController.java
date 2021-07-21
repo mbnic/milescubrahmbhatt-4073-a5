@@ -3,7 +3,10 @@ package ucf.assignments;
 import com.sun.source.doctree.SystemPropertyTree;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -11,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -60,7 +64,7 @@ public class MainWindowController implements Initializable {
         //check if value entered is a number
         try {
             Double checkValue = Double.parseDouble(itemPriceTextField.getText());
-            valueFlag = true;
+
         } catch (NumberFormatException e) {
             valueFlag = false;
             Stage stage = new Stage();
@@ -71,10 +75,7 @@ public class MainWindowController implements Initializable {
         }
 
         //check if serial format is correct
-        if (itemModel.isCorrectSerialFormat(serial)) {
-            serialFlag = true;
-
-        } else {
+        if (!itemModel.isCorrectSerialFormat(serial)) {
             serialFlag = false;
             Stage stage = new Stage();
             stage.setTitle("ERROR");
@@ -84,9 +85,7 @@ public class MainWindowController implements Initializable {
         }
 
         //check if serial number is a duplicate
-        if (itemModel.isUniqueSerialNumber(serial)) {
-            serialFlag = true;
-        } else {
+        if (!itemModel.isUniqueSerialNumber(serial)) {
             serialFlag = false;
             Stage stage = new Stage();
             stage.setTitle("ERROR");
@@ -96,9 +95,7 @@ public class MainWindowController implements Initializable {
         }
 
         //check name is correct format
-        if (name.length() > 2 && name.length() <= 256)
-            nameFlag = true;
-        else {
+        if (name.length() < 2 || name.length() > 256) {
             nameFlag = false;
             Stage stage = new Stage();
             stage.setTitle("ERROR");
@@ -137,12 +134,22 @@ public class MainWindowController implements Initializable {
     void editItemButtonClicked(ActionEvent event) {
         Item item = itemsTableView.getSelectionModel().getSelectedItem();
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("itemEditWindow.fxml"));
+            Parent root = loader.load();
+
+            ItemEditController controller = loader.getController();
+            controller.initialize(item, itemModel);
 
 
-        Stage stage = new Stage();
-        stage.setTitle("Edit Item");
-        stage.setScene(sceneManager.getScene("itemEditWindow"));
-        stage.show();
+            Stage stage = new Stage();
+            stage.setTitle("Edit Item");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

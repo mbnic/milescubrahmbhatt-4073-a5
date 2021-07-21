@@ -26,14 +26,15 @@ public class ItemModel {
     }
 
     public boolean isCorrectSerialFormat (String newSerial) {
-        if (!newSerial.matches("[a-zA-Z0-9]*")
-                && (newSerial.matches(".*\\s+.*"))
-                    && !(newSerial.length() == 10)) {
-
+        if (!newSerial.matches("[a-zA-Z0-9]*"))
             return false;
-        }
+        else if(newSerial.matches(".*\\s+.*"))
+            return false;
+        else if(!(newSerial.length() == 10))
+            return false;
 
-        return true;
+        else
+            return true;
     }
 
     public void add(Item item) {
