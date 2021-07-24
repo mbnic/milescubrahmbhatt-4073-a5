@@ -19,21 +19,15 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" onAction="#newFileMenuItemClicked" text="New" />
-              <MenuItem mnemonicParsing="false" onAction="#saveAsMenuItemClicked" text="Save as..." />
-                  <MenuItem mnemonicParsing="false" text="Load..." />
+                  <MenuItem mnemonicParsing="false" onAction="#resetListMenuItemClicked" text="Reset List" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Quit" />
+              <MenuItem mnemonicParsing="false" onAction="#saveAsMenuItemClicked" text="Save as..." />
+                  <MenuItem mnemonicParsing="false" onAction="#loadMenuItemClicked" text="Load..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Find">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#searchInventoryMenuItemClicked" text="Search..." />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>

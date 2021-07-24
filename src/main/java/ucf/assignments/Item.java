@@ -11,7 +11,7 @@ public class Item {
     private SimpleStringProperty serialNumber;
     private SimpleStringProperty value;
 
-    public Item(String serialNumber, String name, double value) {
+    public Item(double value, String serialNumber, String name) {
         this.name = new SimpleStringProperty(name);
         this.serialNumber = new SimpleStringProperty(serialNumber);
 

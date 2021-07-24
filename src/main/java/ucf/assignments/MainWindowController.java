@@ -1,7 +1,9 @@
 package ucf.assignments;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.source.doctree.SystemPropertyTree;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,11 +20,12 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class MainWindowController implements Initializable {
 
@@ -54,10 +57,10 @@ public class MainWindowController implements Initializable {
         itemsValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         itemsNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        itemModel.add(new Item("123456789K", "nic", 2.959999));
-        itemModel.add(new Item("1234567OOO", "nic", 2.99));
-        itemModel.add(new Item("1234567UUU", "bry", 16.99));
-        itemModel.add(new Item("1234567WWW", "bry", 16.99));
+//        itemModel.add(new Item(2.959999, "1234567000", "nic"));
+//        itemModel.add(new Item(2.959999, "1234567WWW", "nic"));
+//        itemModel.add(new Item(2.959999, "1234567JJJ", "bry"));
+//        itemModel.add(new Item(2.959999, "1234567K9L", "bry"));
 
         itemsTableView.setItems(itemModel.getInventory());
     }
@@ -161,8 +164,6 @@ public class MainWindowController implements Initializable {
         }
 
         itemsTableView.setItems(itemModel.getSearchResults());
-
-
     }
 
     @FXML
@@ -210,11 +211,123 @@ public class MainWindowController implements Initializable {
         if (file != null) {
             saveFile(file);
         }
-
-
     }
 
+    @FXML
+    public void loadMenuItemClicked() {
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("TXT Files", "*.txt");
+        fileChooser.getExtensionFilters().add(extensionFilter);
 
+        extensionFilter = new FileChooser.ExtensionFilter("HTML", "*.html");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
+        extensionFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null)
+            loadFile(file);
+    }
+
+    @FXML
+    public void resetListMenuItemClicked() {
+        itemModel.getInventory().clear();
+    }
+
+    public void loadFile(File file) {
+        if (file.getName().endsWith(".txt"))
+            loadTXT(file);
+
+        if (file.getName().endsWith(".html"))
+            loadHTML(file);
+
+        if (file.getName().endsWith(".json"))
+            loadJSON(file);
+    }
+
+    public void loadTXT(File file) {
+        List<String> lines = new ArrayList<>();
+        Scanner scanner = null;
+
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+
+            if (!line.isEmpty())
+                lines.add(line);
+        }
+
+        for (String line : lines) {
+            String[] splits = line.split("\t");
+
+            itemModel.getInventory().add(new Item(Double.parseDouble(splits[0]), splits[1], splits[2]));
+        }
+    }
+
+    public void loadHTML(File file) {
+        List<String> lines = new ArrayList<>();
+
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains("<td>")) {
+                    lines.add(line);
+                }
+            }
+
+            int counter = 0;
+            List<String> info = new ArrayList<>(3);
+
+            for (int i = 0; i < lines.size(); i++) {
+                if (counter == 3) {
+                    itemModel.getInventory().add(new Item(Double.parseDouble(info.get(0)), info.get(1), info.get(2)));
+                    counter = 0;
+                }
+                else {
+                    String str = lines.get(i);
+                    info.add(str.substring(6, str.length() - 5));
+                    counter++;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadJSON(File file) {
+
+        try {
+            JsonElement fileElement = JsonParser.parseReader(new FileReader(file));
+            JsonObject fileObject = fileElement.getAsJsonObject();
+
+            JsonArray itemArray = fileObject.get("Inventory").getAsJsonArray();
+
+            for (JsonElement itemElement: itemArray) {
+                JsonObject itemObject = itemElement.getAsJsonObject();
+
+                String value = itemObject.get("value").getAsString();
+                String serialNumber = itemObject.get("serial number").getAsString();
+                String name = itemObject.get("name").getAsString();
+
+                itemModel.add(new Item(Double.parseDouble(value), serialNumber, name));
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void saveFile(File file) {
         if (file.getName().endsWith(".txt"))
@@ -302,10 +415,10 @@ public class MainWindowController implements Initializable {
         JsonObject inventoryJSON = new JsonObject();
         JsonArray items = new JsonArray();
 
-        for (int i = 0; i < inventory.size(); i++) {
-            serialNumber = inventory.get(i).getSerialNumber();
-            name = inventory.get(i).getName();
-            value = inventory.get(i).getValue().substring(1);
+        for (Item item : inventory) {
+            serialNumber = item.getSerialNumber();
+            name = item.getName();
+            value = item.getValue().substring(1);
 
             JsonObject itemObj = new JsonObject();
 
@@ -327,17 +440,13 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    public void displaySearchedItems(ObservableList<Item> foundItems) {
-        itemsTableView.getItems().clear();
-        itemsTableView.setItems(foundItems);
-    }
 
     public void deleteItem(Item item) {
         itemModel.remove(item);
     }
 
     public void addNewItem(String serial, String name, double value) {
-        Item item = new Item(serial, name, value);
+        Item item = new Item(value, serial, name);
         itemModel.add(item);
     }
 }
