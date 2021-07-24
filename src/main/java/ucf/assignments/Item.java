@@ -3,15 +3,21 @@ package ucf.assignments;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Item {
     private SimpleStringProperty name;
     private SimpleStringProperty serialNumber;
-    private SimpleDoubleProperty value;
+    private SimpleStringProperty value;
 
     public Item(String serialNumber, String name, double value) {
         this.name = new SimpleStringProperty(name);
         this.serialNumber = new SimpleStringProperty(serialNumber);
-        this.value = new SimpleDoubleProperty(value);
+
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+
+        this.value = new SimpleStringProperty(formatter.format(value));
     }
 
     public String getName() {
@@ -38,15 +44,16 @@ public class Item {
         this.serialNumber.set(serialNumber);
     }
 
-    public double getValue() {
+    public String getValue() {
         return value.get();
     }
 
-    public SimpleDoubleProperty valueProperty() {
+    public SimpleStringProperty valueProperty() {
         return value;
     }
 
     public void setValue(double value) {
-        this.value.set(value);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+        this.value.set(formatter.format(value));
     }
 }

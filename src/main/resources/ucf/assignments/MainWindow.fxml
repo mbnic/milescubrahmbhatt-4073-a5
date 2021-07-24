@@ -20,7 +20,7 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#newFileMenuItemClicked" text="New" />
-              <MenuItem mnemonicParsing="false" text="Save as..." />
+              <MenuItem mnemonicParsing="false" onAction="#saveAsMenuItemClicked" text="Save as..." />
                   <MenuItem mnemonicParsing="false" text="Load..." />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Quit" />
@@ -42,9 +42,9 @@
    <center>
       <TableView fx:id="itemsTableView" prefHeight="268.0" prefWidth="600.0" BorderPane.alignment="CENTER">
         <columns>
+            <TableColumn fx:id="itemsValueColumn" editable="false" prefWidth="174.0" text="Value" />
           <TableColumn fx:id="itemsSerialNumberColumn" editable="false" prefWidth="173.0" text="Serial Number" />
           <TableColumn fx:id="itemsNameColumn" editable="false" minWidth="0.0" prefWidth="252.0" text="Name" />
-            <TableColumn fx:id="itemsValueColumn" editable="false" prefWidth="174.0" text="Value" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -69,6 +69,7 @@
                <children>
                   <Button mnemonicParsing="false" onAction="#deleteItemButtonClicked" text="Delete Selected Item" />
                   <Button mnemonicParsing="false" onAction="#editItemButtonClicked" prefHeight="25.0" prefWidth="235.0" text="Edit Selected Item" textAlignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#showAllButtonClicked" prefHeight="25.0" prefWidth="155.0" text="Show All Items" />
                </children>
             </HBox>
          </children>

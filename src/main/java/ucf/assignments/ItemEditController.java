@@ -1,12 +1,10 @@
 package ucf.assignments;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 
 public class ItemEditController {
 
@@ -29,12 +27,13 @@ public class ItemEditController {
         valueTextField.setPromptText(String.valueOf(item.getValue()));
     }
 
-    public void saveChangesButtonClicked(ActionEvent actionEvent) {
+
+    public void saveChangesButtonClicked(ActionEvent event) {
         boolean valueFlag = true;
         boolean nameFlag = true;
         boolean serialDuplicateFlag = true;
         boolean serialFormatFlag = true;
-        Double value = null;
+        double value = 0.0;
         
         String serial = serialNumberTextField.getText();
         String name = nameTextField.getText();
@@ -73,7 +72,7 @@ public class ItemEditController {
 
         if (!name.isBlank()) {
             //check name is correct format
-            if (name.length() < 2 || name.length() > 256) {
+            if (!itemModel.isCorrectNameLength(name)) {
                 nameFlag = false;
                 errorText.setText("Name must be between 2 and 256 characters in length");
                 nameTextField.clear();

@@ -8,9 +8,11 @@ import java.util.Locale;
 public class ItemModel {
 
     private ObservableList<Item> inventory;
+    private ObservableList<Item> searchResults;
 
     public ItemModel() {
         inventory = FXCollections.observableArrayList();
+        searchResults = FXCollections.observableArrayList();
     }
 
     public boolean isUniqueSerialNumber (String newSerial){
@@ -37,6 +39,10 @@ public class ItemModel {
             return true;
     }
 
+    public boolean isCorrectNameLength (String newName) {
+        return newName.length() >= 2 && newName.length() <= 256;
+    }
+
     public void add(Item item) {
         if (inventory.size() < 101)
             inventory.add(item);
@@ -50,8 +56,34 @@ public class ItemModel {
         inventory.clear();
     }
 
+    public Item findItemBySerial(String serialQuery) {
+
+        for (int i = 0; i < inventory.size(); i++) {
+
+            String setSerialNumbers = inventory.get(i).getSerialNumber().toUpperCase(Locale.ROOT);
+
+            if (serialQuery.toUpperCase(Locale.ROOT).equals(setSerialNumbers)) {
+                return inventory.get(i);
+            }
+        }
+
+        return null;
+    }
+
     public ObservableList<Item> getInventory() {
         return inventory;
+    }
+
+    public void addSearchResult(Item item) {
+        searchResults.add(item);
+    }
+
+    public ObservableList<Item> getSearchResults() {
+        return searchResults;
+    }
+
+    public void clearSearchResults() {
+        searchResults.clear();
     }
 
     public void setInventory(ObservableList<Item> inventory) {

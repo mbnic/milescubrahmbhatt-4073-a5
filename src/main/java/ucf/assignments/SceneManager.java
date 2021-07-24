@@ -17,6 +17,7 @@ public class SceneManager {
         MainWindowController mainWindowController = new MainWindowController(itemModel, this);
         //ItemEditController itemEditController = new ItemEditController(itemModel, this);
         //add controller for whatever new windows you decide to add
+        //InventorySearchController inventorySearchController = new InventorySearchController();
 
         Parent root;
 
@@ -30,11 +31,11 @@ public class SceneManager {
         }
 
 
-//        loader = new FXMLLoader(getClass().getResource("itemEditWindow.fxml"));
-//        loader.setController(itemEditController);
+//        loader = new FXMLLoader(getClass().getResource("inventorySearchWindow.fxml"));
+//        loader.setController(inventorySearchController);
 //        try {
 //            root = loader.load();
-//            scenes.put("itemEditWindow", new Scene(root));
+//            scenes.put("inventorySearchWindow", new Scene(root));
 //
 //        } catch(IOException e) {
 //            e.printStackTrace();
