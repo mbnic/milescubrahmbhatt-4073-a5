@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Nicolas Milescu-Brahmbhatt
+ */
+
 package ucf.assignments;
 
 import com.google.gson.JsonArray;

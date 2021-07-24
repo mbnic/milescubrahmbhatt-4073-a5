@@ -1,3 +1,7 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Nicolas Milescu-Brahmbhatt
+ */
 package ucf.assignments;
 
 import javafx.fxml.FXMLLoader;
@@ -15,9 +19,6 @@ public class SceneManager {
         ItemModel itemModel = new ItemModel();
 
         MainWindowController mainWindowController = new MainWindowController(itemModel, this);
-        //ItemEditController itemEditController = new ItemEditController(itemModel, this);
-        //add controller for whatever new windows you decide to add
-        //InventorySearchController inventorySearchController = new InventorySearchController();
 
         Parent root;
 
@@ -29,17 +30,6 @@ public class SceneManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        loader = new FXMLLoader(getClass().getResource("inventorySearchWindow.fxml"));
-//        loader.setController(inventorySearchController);
-//        try {
-//            root = loader.load();
-//            scenes.put("inventorySearchWindow", new Scene(root));
-//
-//        } catch(IOException e) {
-//            e.printStackTrace();
-//        }
 
 
         loader = new FXMLLoader(getClass().getResource("valueEnteredError.fxml"));

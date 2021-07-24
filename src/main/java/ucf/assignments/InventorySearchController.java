@@ -1,7 +1,10 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Nicolas Milescu-Brahmbhatt
+ */
+
 package ucf.assignments;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 import javafx.event.ActionEvent;
