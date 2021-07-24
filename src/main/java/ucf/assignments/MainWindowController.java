@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.source.doctree.SystemPropertyTree;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,11 +55,6 @@ public class MainWindowController implements Initializable {
 
         itemsValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         itemsNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
-//        itemModel.add(new Item(2.959999, "1234567000", "nic"));
-//        itemModel.add(new Item(2.959999, "1234567WWW", "nic"));
-//        itemModel.add(new Item(2.959999, "1234567JJJ", "bry"));
-//        itemModel.add(new Item(2.959999, "1234567K9L", "bry"));
 
         itemsTableView.setItems(itemModel.getInventory());
     }
