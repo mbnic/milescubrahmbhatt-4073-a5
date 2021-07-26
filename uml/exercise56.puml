@@ -34,14 +34,6 @@ class MainWindowController {
 
 }
 
-class FileManager {
-    saveAsCSV(filename: String, data: String)
-    saveAsHTML(filename: String, data: String)
-    saveAsJSON(filename: String, data: String)
-}
-
-
-
 
 class SearchItemWindowController {
 }

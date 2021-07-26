@@ -32,7 +32,8 @@ public class InventorySearchController {
         String serialQuery = serialNumberTextField.getText();
 
         if (itemModel.isCorrectSerialFormat(serialQuery)) {
-            searchForSerialNumber(serialQuery);
+            if(searchForSerialNumber(serialQuery))
+                closeStage();
         }
 
         else {
@@ -47,7 +48,8 @@ public class InventorySearchController {
         String nameQuery = nameTextField.getText();
 
         if (itemModel.isCorrectNameLength(nameQuery)) {
-            searchForName(nameQuery);
+            if(searchForName(nameQuery))
+                closeStage();
         }
 
         else {
@@ -57,7 +59,7 @@ public class InventorySearchController {
     }
 
 
-    public void searchForName(String nameQuery) {
+    public boolean searchForName(String nameQuery) {
         int inventorySize = itemModel.getInventory().size();
 
         for (int i = 0; i < inventorySize; i++) {
@@ -67,30 +69,37 @@ public class InventorySearchController {
             if (nameQuery.toUpperCase(Locale.ROOT).equals(setNames)) {
                 Item item = itemModel.getInventory().get(i);
                 itemModel.addSearchResult(item);
-
-                        //.add(new Item(item.getSerialNumber(), item.getName(), item.getValue()));
             }
         }
 
-        if (itemModel.getSearchResults().isEmpty())
-            errorText.setText("Item Not Found");
-
-        else {
-            Stage stage = (Stage) nameTextField.getScene().getWindow();
-            stage.close();
+        if (itemModel.getSearchResults().isEmpty()) {
+            displayError();
+            return false;
         }
+
+        else
+            return true;
     }
 
-    public void searchForSerialNumber(String serialQuery) {
+    public boolean searchForSerialNumber(String serialQuery) {
         Item item = itemModel.findItemBySerial(serialQuery);
 
         if (item != null) {
             itemModel.addSearchResult(item);
-            Stage stage = (Stage) serialNumberTextField.getScene().getWindow();
-            stage.close();
+            return true;
         }
         else {
             errorText.setText("Item Not Found");
+            return false;
         }
+    }
+
+    public void closeStage() {
+        Stage stage = (Stage) nameTextField.getScene().getWindow();
+        stage.close();
+    }
+
+    public void displayError() {
+        errorText.setText("Item Not Found");
     }
 }

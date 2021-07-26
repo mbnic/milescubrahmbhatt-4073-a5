@@ -64,7 +64,6 @@ public class MainWindowController implements Initializable {
         itemsTableView.setItems(itemModel.getInventory());
     }
 
-
     @FXML
     public void addNewItemButtonClicked(ActionEvent event) {
         boolean valueFlag = true;
@@ -120,7 +119,7 @@ public class MainWindowController implements Initializable {
 
         if (valueFlag && nameFlag && serialFlag) {
             double value = Double.parseDouble(itemPriceTextField.getText());
-            addNewItem(serial, name, value);
+            addNewItem(value, serial, name);
             itemNameTextField.clear();
             itemSerialNumberTextField.clear();
             itemPriceTextField.clear();
@@ -134,13 +133,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    public void newFileMenuItemClicked(ActionEvent event) {
-        itemModel.eraseAllItems();
-    }
-
-    @FXML
     public void searchInventoryMenuItemClicked(ActionEvent event) {
-        //Item item = itemsTableView.getSelectionModel().getSelectedItem();
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("inventorySearchWindow.fxml"));
@@ -175,6 +168,7 @@ public class MainWindowController implements Initializable {
 
             ItemEditController controller = loader.getController();
             controller.initialize(item, itemModel);
+            controller.setPromptText();
 
 
             Stage stage = new Stage();
@@ -444,7 +438,7 @@ public class MainWindowController implements Initializable {
         itemModel.remove(item);
     }
 
-    public void addNewItem(String serial, String name, double value) {
+    public void addNewItem(double value, String serial, String name) {
         Item item = new Item(value, serial, name);
         itemModel.add(item);
     }

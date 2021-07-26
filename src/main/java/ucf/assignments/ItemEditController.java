@@ -25,10 +25,13 @@ public class ItemEditController {
     public void initialize(Item item, ItemModel itemModel) {
         this.itemModel = itemModel;
         this.selectedItem = item;
+    }
 
-        serialNumberTextField.setPromptText(item.getSerialNumber());
-        nameTextField.setPromptText(item.getName());
-        valueTextField.setPromptText(String.valueOf(item.getValue()));
+
+    public void setPromptText() {
+        serialNumberTextField.setPromptText(selectedItem.getSerialNumber());
+        nameTextField.setPromptText(selectedItem.getName());
+        valueTextField.setPromptText(String.valueOf(selectedItem.getValue()));
     }
 
 
@@ -87,16 +90,29 @@ public class ItemEditController {
         if (valueFlag && nameFlag && serialFormatFlag && serialDuplicateFlag) {
             
             if (!name.isBlank())
-                selectedItem.setName(name);
+                changeName(name);
             
             if (!serial.isBlank())
-                selectedItem.setSerialNumber(serial);
+                changeSerialNumber(serial);
             
             if (!valueSTR.isBlank())
-                selectedItem.setValue(value);
+                changeValue(value);
 
             Stage stage = (Stage) nameTextField.getScene().getWindow();
             stage.close();
         }
     }
+
+    public void changeName(String name) {
+        selectedItem.setName(name);
+    }
+
+    public void changeSerialNumber(String serial) {
+        selectedItem.setSerialNumber(serial);
+    }
+
+    public void changeValue(Double value) {
+        selectedItem.setValue(value);
+    }
+
 }
