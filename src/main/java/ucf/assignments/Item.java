@@ -18,6 +18,7 @@ public class Item {
         this.name = new SimpleStringProperty(name);
         this.serialNumber = new SimpleStringProperty(serialNumber);
 
+        //convert double to currency format
         NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
 
         this.value = new SimpleStringProperty(formatter.format(value));

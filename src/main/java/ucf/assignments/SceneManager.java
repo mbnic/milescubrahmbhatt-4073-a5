@@ -22,6 +22,7 @@ public class SceneManager {
 
         Parent root;
 
+        //MAIN WINDOW SCENE
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
         loader.setController(mainWindowController);
         try {
@@ -31,7 +32,7 @@ public class SceneManager {
             e.printStackTrace();
         }
 
-
+        //VALUE ERROR SCENE
         loader = new FXMLLoader(getClass().getResource("valueEnteredError.fxml"));
         try {
             root = loader.load();
@@ -40,6 +41,7 @@ public class SceneManager {
             e.printStackTrace();
         }
 
+        //NAME ERROR SCENE
         loader = new FXMLLoader(getClass().getResource("nameEnteredError.fxml"));
         try {
             root = loader.load();
@@ -48,6 +50,7 @@ public class SceneManager {
             e.printStackTrace();
         }
 
+        //SERIAL NUMBER SCENE
         loader = new FXMLLoader(getClass().getResource("serialNumberEnteredError.fxml"));
         try {
             root = loader.load();
@@ -56,6 +59,7 @@ public class SceneManager {
             e.printStackTrace();
         }
 
+        //DUPLICATE SERIAL NUMBER SCENE
         loader = new FXMLLoader(getClass().getResource("duplicateSerialNumberEnteredError.fxml"));
         try {
             root = loader.load();
@@ -64,10 +68,6 @@ public class SceneManager {
             e.printStackTrace();
         }
     }
-
-//    public ItemEditController getItemEditController() {
-//
-//    }
 
     public Scene getScene(String sceneName) {
         return scenes.get(sceneName);

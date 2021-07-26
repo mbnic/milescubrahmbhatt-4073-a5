@@ -23,12 +23,17 @@ public class ItemEditController {
 
 
     public void initialize(Item item, ItemModel itemModel) {
+        //to access inventory later
         this.itemModel = itemModel;
+
+        //the item being edited
         this.selectedItem = item;
     }
 
 
     public void setPromptText() {
+        //displays the previous item information
+
         serialNumberTextField.setPromptText(selectedItem.getSerialNumber());
         nameTextField.setPromptText(selectedItem.getName());
         valueTextField.setPromptText(String.valueOf(selectedItem.getValue()));
@@ -88,13 +93,16 @@ public class ItemEditController {
 
         
         if (valueFlag && nameFlag && serialFormatFlag && serialDuplicateFlag) {
-            
+
+            //if name was edited
             if (!name.isBlank())
                 changeName(name);
-            
+
+            //if serial number was edited
             if (!serial.isBlank())
                 changeSerialNumber(serial);
-            
+
+            //if value was changed
             if (!valueSTR.isBlank())
                 changeValue(value);
 

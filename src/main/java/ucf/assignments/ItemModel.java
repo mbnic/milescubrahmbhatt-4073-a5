@@ -61,7 +61,7 @@ public class ItemModel {
     }
 
     public Item findItemBySerial(String serialQuery) {
-
+        //iterate through inventory to see if there is a match
         for (int i = 0; i < inventory.size(); i++) {
 
             String setSerialNumbers = inventory.get(i).getSerialNumber().toUpperCase(Locale.ROOT);

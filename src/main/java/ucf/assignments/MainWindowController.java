@@ -52,6 +52,7 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //initialize all columns in the table view
         itemsSerialNumberColumn.setCellValueFactory(new PropertyValueFactory<>("serialNumber"));
         itemsSerialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
@@ -116,7 +117,7 @@ public class MainWindowController implements Initializable {
             itemNameTextField.clear();
         }
 
-
+        //add item if all flags are good
         if (valueFlag && nameFlag && serialFlag) {
             double value = Double.parseDouble(itemPriceTextField.getText());
             addNewItem(value, serial, name);
@@ -128,13 +129,15 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void deleteItemButtonClicked(ActionEvent event) {
+        //get item and send to delete method
+
         Item item = itemsTableView.getSelectionModel().getSelectedItem();
         deleteItem(item);
     }
 
     @FXML
     public void searchInventoryMenuItemClicked(ActionEvent event) {
-
+        //open searchInventoryController and stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("inventorySearchWindow.fxml"));
             Parent root = loader.load();
@@ -155,6 +158,7 @@ public class MainWindowController implements Initializable {
             e.printStackTrace();
         }
 
+        //set the search results once the search is complete
         itemsTableView.setItems(itemModel.getSearchResults());
     }
 
@@ -162,6 +166,7 @@ public class MainWindowController implements Initializable {
     public void editItemButtonClicked(ActionEvent event) {
         Item item = itemsTableView.getSelectionModel().getSelectedItem();
 
+        //get item to be edited and send it to ItemEditController
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("itemEditWindow.fxml"));
             Parent root = loader.load();
@@ -208,8 +213,11 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void loadMenuItemClicked() {
+        //open filechooser
         Stage stage = new Stage();
         FileChooser fileChooser = new FileChooser();
+
+        //set all the file extension types
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("TXT Files", "*.txt");
         fileChooser.getExtensionFilters().add(extensionFilter);
 
@@ -230,7 +238,11 @@ public class MainWindowController implements Initializable {
         itemModel.getInventory().clear();
     }
 
+
+
     public void loadFile(File file) {
+        //send the file to the appropriate file type method to be loaded
+
         if (file.getName().endsWith(".txt"))
             loadTXT(file);
 
@@ -242,6 +254,7 @@ public class MainWindowController implements Initializable {
     }
 
     public void loadTXT(File file) {
+
         List<String> lines = new ArrayList<>();
         Scanner scanner = null;
 
@@ -251,6 +264,7 @@ public class MainWindowController implements Initializable {
             e.printStackTrace();
         }
 
+        //scan all lines of txt file
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
 
@@ -258,6 +272,7 @@ public class MainWindowController implements Initializable {
                 lines.add(line);
         }
 
+        //split the data in each line to add to inventory
         for (String line : lines) {
             String[] splits = line.split("\t");
 
@@ -272,6 +287,7 @@ public class MainWindowController implements Initializable {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
 
+            //read contents of line only if it is a table data row
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.contains("<td>")) {
@@ -282,6 +298,7 @@ public class MainWindowController implements Initializable {
             int counter = 0;
             List<String> info = new ArrayList<>(3);
 
+            //add each element to inventory
             for (int i = 0; i < lines.size(); i++) {
                 if (counter == 3) {
                     itemModel.getInventory().add(new Item(Double.parseDouble(info.get(0)), info.get(1), info.get(2)));
@@ -300,7 +317,7 @@ public class MainWindowController implements Initializable {
     }
 
     public void loadJSON(File file) {
-
+        //use json objects to read in the data from JSon file
         try {
             JsonElement fileElement = JsonParser.parseReader(new FileReader(file));
             JsonObject fileObject = fileElement.getAsJsonObject();
@@ -323,6 +340,8 @@ public class MainWindowController implements Initializable {
     }
 
     public void saveFile(File file) {
+        //send to appropriate file type method
+
         if (file.getName().endsWith(".txt"))
             saveTXT(file);
 
@@ -342,6 +361,7 @@ public class MainWindowController implements Initializable {
 
         ObservableList<Item> inventory = itemModel.getInventory();
 
+        //build a string with all of the inventory items
         for (Item items : inventory) {
             serialNumber = items.getSerialNumber();
             name = items.getName();
@@ -352,6 +372,7 @@ public class MainWindowController implements Initializable {
                     + "\t" + name + "\n");
         }
 
+        //write the string to the file
         try {
             PrintWriter write = new PrintWriter(file);
             write.println(inventoryData);
@@ -371,6 +392,7 @@ public class MainWindowController implements Initializable {
 
         inventoryData.append("<table>" + "\n");
 
+        //build a table in html format using the data from inventory
         for (Item items : inventory) {
             serialNumber = items.getSerialNumber();
             name = items.getName();
@@ -387,6 +409,7 @@ public class MainWindowController implements Initializable {
 
         inventoryData.append("</table>");
 
+        //write to file
         try {
             PrintWriter write = new PrintWriter(file);
             write.println(inventoryData);
@@ -408,6 +431,7 @@ public class MainWindowController implements Initializable {
         JsonObject inventoryJSON = new JsonObject();
         JsonArray items = new JsonArray();
 
+        //using json objects store the inventory data
         for (Item item : inventory) {
             serialNumber = item.getSerialNumber();
             name = item.getName();
@@ -424,6 +448,7 @@ public class MainWindowController implements Initializable {
 
         inventoryJSON.add("Inventory", items);
 
+        //then send to file
         try {
             PrintWriter write = new PrintWriter(file);
             write.println(inventoryJSON);
@@ -432,7 +457,6 @@ public class MainWindowController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     public void deleteItem(Item item) {
         itemModel.remove(item);

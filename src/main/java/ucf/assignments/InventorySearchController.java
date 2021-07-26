@@ -24,6 +24,7 @@ public class InventorySearchController {
     @FXML private Text errorText;
 
     public void initialize(ItemModel itemModel) {
+        //to access inventory later
         this.itemModel = itemModel;
     }
 
@@ -31,11 +32,13 @@ public class InventorySearchController {
     public void searchSerialButtonClicked(ActionEvent event) {
         String serialQuery = serialNumberTextField.getText();
 
+        //if new serial is correct format send to Search method
         if (itemModel.isCorrectSerialFormat(serialQuery)) {
             if(searchForSerialNumber(serialQuery))
                 closeStage();
         }
 
+        //display error otherwise
         else {
             errorText.setText("Incorrect Serial Number Format");
             serialNumberTextField.clear();
@@ -47,11 +50,13 @@ public class InventorySearchController {
     public void searchNameButtonClicked(ActionEvent event) {
         String nameQuery = nameTextField.getText();
 
+        //if user enters right length then send to Search method
         if (itemModel.isCorrectNameLength(nameQuery)) {
             if(searchForName(nameQuery))
                 closeStage();
         }
 
+        //otherwise dispay error
         else {
             errorText.setText("Name must be between 2 and 256 characters in length");
             nameTextField.clear();
@@ -62,6 +67,7 @@ public class InventorySearchController {
     public boolean searchForName(String nameQuery) {
         int inventorySize = itemModel.getInventory().size();
 
+        //iterate through inventory to see if there is a name that matches
         for (int i = 0; i < inventorySize; i++) {
 
             String setNames = itemModel.getInventory().get(i).getName().toUpperCase(Locale.ROOT);
@@ -72,6 +78,7 @@ public class InventorySearchController {
             }
         }
 
+        //display error if not found
         if (itemModel.getSearchResults().isEmpty()) {
             displayError();
             return false;
